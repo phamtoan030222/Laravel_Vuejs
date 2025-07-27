@@ -14,6 +14,12 @@ class AuthController extends Controller
     }
 
     public function index(){
+
+        if(Auth::id() > 0){
+            return redirect()->route('dashboard.index');
+    
+        }
+
         return view('backend.auth.login');
     }
 
@@ -28,6 +34,14 @@ class AuthController extends Controller
     // Đăng nhập thất bại
     return redirect()->route('auth.admin')->with('error','Email hoặc Mật khẩu không chính xác.');
 }
+    
+    public function logout(Request $request){
+       Auth::logout();
+       $request->session()->invalidate();
+       $request->session()->regenerateToken();
+
+       return redirect()->route('auth.admin');
+    }
 
 }
 
